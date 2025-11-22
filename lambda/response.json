@@ -1,0 +1,1 @@
+{"statusCode": 200, "headers": {"Content-Type": "application/json"}, "body": "[{\"description\": \"Adjustable laptop stand with Per Scholas logo\", \"price\": 50.0, \"name\": \"Laptop Stand\", \"productId\": \"laptop-stand\"}, {\"description\": \"High-performance laptop with AWS Lambda logo\", \"price\": 1200.0, \"name\": \"Laptop\", \"productId\": \"laptop\"}]"}

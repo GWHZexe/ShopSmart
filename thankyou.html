@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ShopSmart • Order Confirmed</title>
+  <style>
+    body {
+      background-image: url('https://shopsmart-hkilla-2025.s3.amazonaws.com/background.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #111827;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .card {
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      padding: 24px 28px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.25);
+      max-width: 480px;
+      width: 90%;
+    }
+    h1 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 24px;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: #4b5563;
+      margin-bottom: 16px;
+    }
+    .order-items {
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+    .order-items div {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+    .total {
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      background: #2563eb;
+      color: white;
+    }
+    button:hover {
+      background: #1d4ed8;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>✅ Order confirmed!</h1>
+    <div class="subtitle">
+      Thank you for shopping with <strong>ShopSmart</strong>.  
+      This is a demo checkout powered by AWS Lambda, API Gateway, DynamoDB, and S3.
+    </div>
+
+    <div class="order-items" id="order-items">
+      Loading your order...
+    </div>
+
+    <div class="total" id="order-total"></div>
+
+    <button onclick="goBack()">Back to Shop</button>
+  </div>
+
+  <script>
+    function renderOrder() {
+      const raw = window.localStorage.getItem('shopsmart-last-order');
+      const itemsDiv = document.getElementById('order-items');
+      const totalDiv = document.getElementById('order-total');
+
+      if (!raw) {
+        itemsDiv.textContent = 'No recent order found.';
+        totalDiv.textContent = '';
+        return;
+      }
+
+      const order = JSON.parse(raw);
+      if (!order.items || !order.items.length) {
+        itemsDiv.textContent = 'No items in order.';
+        totalDiv.textContent = '';
+        return;
+      }
+
+      itemsDiv.innerHTML = '';
+      order.items.forEach(item => {
+        const row = document.createElement('div');
+        const lineTotal = Number(item.price) * item.quantity;
+        row.innerHTML = `
+          <span>${item.name} x ${item.quantity}</span>
+          <span>$${lineTotal.toFixed(2)}</span>
+        `;
+        itemsDiv.appendChild(row);
+      });
+
+      totalDiv.textContent = 'Order total: $' + Number(order.total).toFixed(2);
+    }
+
+    function goBack() {
+      window.location.href = 'index.html';
+    }
+
+    renderOrder();
+  </script>
+</body>
+</html>

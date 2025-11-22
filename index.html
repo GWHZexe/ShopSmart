@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ShopSmart</title>
+  <style>
+    :root {
+      --accent: #2563eb;
+      --accent-dark: #1d4ed8;
+    }
+
+    body {
+      background-image: url('https://shopsmart-hkilla-2025.s3.amazonaws.com/background.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #111827;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    header {
+      background: rgba(17, 24, 39, 0.9);
+      color: white;
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: 0.04em;
+    }
+
+    header .subtitle {
+      font-size: 13px;
+      color: #e5e7eb;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .badge {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(59,130,246,0.2);
+      border: 1px solid rgba(59,130,246,0.5);
+    }
+
+    .btn-ghost {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      background: transparent;
+      color: #e5e7eb;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .btn-ghost:hover {
+      background: rgba(148,163,184,0.1);
+    }
+
+    .page {
+      display: flex;
+      gap: 24px;
+      padding: 24px;
+      max-width: 1100px;
+      margin: 24px auto;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    .products {
+      flex: 2;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 14px 35px rgba(15, 23, 42, 0.25);
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      object-fit: cover;
+      max-height: 220px;
+    }
+
+    .card h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .card p {
+      margin: 0 0 8px;
+      font-size: 14px;
+      color: #4b5563;
+    }
+
+    .price {
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    button {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-dark);
+    }
+
+    .cart {
+      flex: 1;
+      background: white;
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      max-width: 340px;
+      height: fit-content;
+      position: sticky;
+      top: 24px;
+    }
+
+    .cart h2 {
+      margin-top: 0;
+      font-size: 18px;
+    }
+
+    .cart-items {
+      max-height: 300px;
+      overflow-y: auto;
+      margin-bottom: 12px;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .cart-total {
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .empty {
+      color: #9ca3af;
+      font-size: 14px;
+    }
+
+    /* Modal for product details */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 40;
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 18px;
+      max-width: 640px;
+      width: 95%;
+      padding: 20px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    .modal-content img {
+      width: 100%;
+      border-radius: 12px;
+      object-fit: cover;
+      max-height: 260px;
+    }
+
+    .modal-title {
+      font-size: 20px;
+      margin: 0 0 8px;
+    }
+
+    .modal-desc {
+      font-size: 14px;
+      color: #4b5563;
+      margin-bottom: 12px;
+    }
+
+    .modal-price {
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .btn-secondary:hover {
+      background: #d1d5db;
+    }
+
+    /* Dark mode styles */
+    body.dark {
+      color: #e5e7eb;
+    }
+
+    body.dark .page {
+      background: rgba(15, 23, 42, 0.92);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    }
+
+    body.dark .card,
+    body.dark .cart,
+    body.dark .modal-content {
+      background: #020617;
+      color: #e5e7eb;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    }
+
+    body.dark .card p,
+    body.dark .modal-desc {
+      color: #cbd5f5;
+    }
+
+    body.dark .btn-secondary {
+      background: #1f2937;
+      color: #e5e7eb;
+    }
+
+    body.dark .btn-secondary:hover {
+      background: #374151;
+    }
+.logo-title { display: flex; align-items: center; gap: 12px; } 
+.logo-img { height: 45px; width: auto; } 
+
+.logo-img { height: 50px; width: auto; border-radius: 12px; margin-right: 8px; } 
+
+  </style>
+</head>
+<body>
+    <header>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <img src="https://shopsmart-hkilla-2025.s3.us-east-1.amazonaws.com/shopsmart-logo.png"
+           alt="ShopSmart Logo"
+           style="height:48px; width:auto; border-radius:12px;">
+      <div>
+        <h1 style="margin:0;">ShopSmart</h1>
+        <div class="subtitle">Demo store • Laptop & Laptop Stand</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="badge">Serverless • Lambda • API Gateway • DynamoDB • S3</div>
+      <button class="btn-ghost" id="theme-toggle">🌙 Dark mode</button>
+    </div>
+  </header>
+
+
+  <div class="page">
+    <main class="products" id="products"></main>
+
+    <aside class="cart">
+      <h2>Your Cart</h2>
+      <div id="cart-items" class="cart-items empty">Cart is empty</div>
+      <div id="cart-total" class="cart-total">Total: $0.00</div>
+      <button class="btn-primary" id="checkout-btn">Place Order</button>
+    </aside>
+  </div>
+
+  <!-- Product detail modal -->
+  <div class="modal-backdrop" id="product-modal">
+    <div class="modal-content">
+      <div>
+        <img id="modal-image" src="" alt="">
+      </div>
+      <div>
+        <h3 class="modal-title" id="modal-title"></h3>
+        <div class="modal-desc" id="modal-desc"></div>
+        <div class="modal-price" id="modal-price"></div>
+        <div class="modal-actions">
+          <button class="btn-primary" id="modal-add">Add to Cart</button>
+          <button class="btn-secondary" id="modal-close">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'https://1ihdkdg0fk.execute-api.us-east-1.amazonaws.com/prod';
+
+    // Image map for products
+    const imageMap = {
+      'laptop-stand': 'https://shopsmart-hkilla-2025.s3.amazonaws.com/laptop_stand_per_scholas_logo.jpg.png',
+      'laptop': 'https://shopsmart-hkilla-2025.s3.amazonaws.com/laptop_aws_lambda_logo.jpg.png',
+      'lambda-laptop-pro': 'https://shopsmart-hkilla-2025.s3.amazonaws.com/laptop_aws_lambda_logo.jpg.png',
+      'cloudshell-laptop': 'https://shopsmart-hkilla-2025.s3.amazonaws.com/laptop_aws_lambda_logo.jpg.png',
+      's3-laptop': 'https://shopsmart-hkilla-2025.s3.amazonaws.com/laptop_aws_lambda_logo.jpg.png'
+    };
+
+    let products = [];
+    let cart = [];
+
+    // THEME TOGGLE (light/dark)
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const savedTheme = window.localStorage.getItem('shopsmart-theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark');
+      themeToggleBtn.textContent = '☀️ Light mode';
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+      const isDark = document.body.classList.toggle('dark');
+      themeToggleBtn.textContent = isDark ? '☀️ Light mode' : '🌙 Dark mode';
+      window.localStorage.setItem('shopsmart-theme', isDark ? 'dark' : 'light');
+    });
+
+    // Render products
+    function renderProducts() {
+      const container = document.getElementById('products');
+      container.innerHTML = '';
+
+      products.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        const imgUrl = imageMap[p.productId];
+
+        card.innerHTML = `
+          <div>
+            <img src="${imgUrl || ''}" alt="${p.name}">
+            <h2>${p.name}</h2>
+            <p>${p.description || ''}</p>
+          </div>
+          <div>
+            <div class="price">$${Number(p.price).toFixed(2)}</div>
+            <button class="btn-primary" data-id="${p.productId}">Add to Cart</button>
+          </div>
+        `;
+
+        // Open modal when clicking anywhere on card except the button
+        card.addEventListener('click', (e) => {
+          if (e.target.matches('button')) return; // ignore button clicks
+          openModal(p);
+        });
+
+        container.appendChild(card);
+      });
+
+      container.querySelectorAll('button[data-id]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation(); // prevent card click
+          const id = btn.getAttribute('data-id');
+          addToCart(id);
+        });
+      });
+    }
+
+    function addToCart(productId) {
+      const product = products.find(p => p.productId === productId);
+      if (!product) return;
+
+      const existing = cart.find(item => item.productId === productId);
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({ ...product, quantity: 1 });
+      }
+      renderCart();
+    }
+
+    function renderCart() {
+      const itemsDiv = document.getElementById('cart-items');
+      const totalDiv = document.getElementById('cart-total');
+
+      if (cart.length === 0) {
+        itemsDiv.textContent = 'Cart is empty';
+        itemsDiv.classList.add('empty');
+        totalDiv.textContent = 'Total: $0.00';
+        return;
+      }
+
+      itemsDiv.classList.remove('empty');
+      itemsDiv.innerHTML = '';
+
+      let total = 0;
+      cart.forEach(item => {
+        const lineTotal = Number(item.price) * item.quantity;
+        total += lineTotal;
+
+        const row = document.createElement('div');
+        row.className = 'cart-item';
+        row.innerHTML = `
+          <span>${item.name} x ${item.quantity}</span>
+          <span>$${lineTotal.toFixed(2)}</span>
+        `;
+        itemsDiv.appendChild(row);
+      });
+
+      totalDiv.textContent = 'Total: $' + total.toFixed(2);
+    }
+
+    // ORDER CONFIRMATION
+    document.getElementById('checkout-btn').addEventListener('click', () => {
+      if (cart.length === 0) {
+        alert('Your cart is empty.');
+        return;
+      }
+      const total = cart.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0);
+      const order = {
+        items: cart,
+        total
+      };
+      window.localStorage.setItem('shopsmart-last-order', JSON.stringify(order));
+      window.location.href = 'thankyou.html';
+    });
+
+    // MODAL LOGIC
+    const modal = document.getElementById('product-modal');
+    const modalImg = document.getElementById('modal-image');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDesc = document.getElementById('modal-desc');
+    const modalPrice = document.getElementById('modal-price');
+    const modalAdd = document.getElementById('modal-add');
+    const modalClose = document.getElementById('modal-close');
+    let modalProductId = null;
+
+    function openModal(product) {
+      modalProductId = product.productId;
+      modalImg.src = imageMap[product.productId] || '';
+      modalTitle.textContent = product.name;
+      modalDesc.textContent = product.description || '';
+      modalPrice.textContent = '$' + Number(product.price).toFixed(2);
+      modal.classList.add('show');
+    }
+
+    modalAdd.addEventListener('click', () => {
+      if (modalProductId) {
+        addToCart(modalProductId);
+      }
+      modal.classList.remove('show');
+    });
+
+    modalClose.addEventListener('click', () => {
+      modal.classList.remove('show');
+    });
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('show');
+      }
+    });
+
+    async function loadProducts() {
+      try {
+        const res = await fetch(API_BASE + '/products');
+        products = await res.json();
+        renderProducts();
+      } catch (err) {
+        console.error('Error loading products', err);
+        document.getElementById('products').innerHTML =
+          '<p>Failed to load products. Check API URL or CORS.</p>';
+      }
+    }
+
+    loadProducts();
+  </script>
+</body>
+</html>
