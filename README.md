@@ -94,7 +94,7 @@ Visit the live website
 👤 Author
 
 Hawi Jordan (HawiK285)
-AWS Cloud Practitioner • AWS Serverless Builder
+AWS Cloud Engineer • AWS Serverless Builder
 🔗 GitHub: https://github.com/HawiK285
 
 🔗 LinkedIn: www.linkedin.com/in/hawi-jordan-3b18752a9
